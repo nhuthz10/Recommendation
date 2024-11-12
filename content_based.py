@@ -9,11 +9,6 @@ from sklearn.metrics.pairwise import linear_kernel
 
 load_dotenv()
 
-print("DB_USERNAME: " + os.getenv('DB_USERNAME'))
-print("DB_PASSWORD: " + os.getenv('DB_PASSWORD'))
-print("DB_HOST: " + os.getenv('DB_HOST'))
-print("DB_DATABASE" + os.getenv('DB_DATABASE'))
-
 app = Flask(__name__)
 CORS(app)  
 
@@ -28,10 +23,10 @@ def load_data_from_db():
     SELECT T0.productId, T0.productTypeId, T3.productTypeName, T0.brandId, T2.brandName, T0.name, T0.image, T0.price, T0.discount, 
            CASE WHEN AVG(T1.rating) IS NULL THEN 0 ELSE ROUND(AVG(T1.rating), 1) END AS rating, 
            T0.descriptionContent, T0.descriptionHTML 
-    FROM products AS T0 
-    JOIN brands AS T2 ON T0.brandId = T2.brandId 
-    JOIN product_types AS T3 ON T0.productTypeId = T3.productTypeId 
-    LEFT JOIN feedbacks AS T1 ON T0.productId = T1.productId 
+    FROM Products AS T0 
+    JOIN Brands AS T2 ON T0.brandId = T2.brandId 
+    JOIN Product_Types AS T3 ON T0.productTypeId = T3.productTypeId 
+    LEFT JOIN Feedbacks AS T1 ON T0.productId = T1.productId 
     GROUP BY T0.productId, T0.productTypeId, T0.brandId, T0.name, T0.image, T0.price, T0.discount, 
              T0.descriptionContent, T0.descriptionHTML, T2.brandName, T3.productTypeName;
     """
