@@ -1,0 +1,7 @@
+Flask
+Flask-CORS
+pandas
+SQLAlchemy
+PyMySQL
+scikit-learn
+python-dotenv
