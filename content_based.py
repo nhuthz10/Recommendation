@@ -10,10 +10,11 @@ from sklearn.metrics.pairwise import linear_kernel
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)  
+CORS(app) 
+
 
 def get_database_connection():
-    db_uri = f"mysql+pymysql://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}/{os.getenv('DB_DATABASE')}"
+    db_uri = f"mysql+pymysql://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_DATABASE')}"
     engine = create_engine(db_uri)
     return engine
 
@@ -35,14 +36,12 @@ def load_data_from_db():
     engine.dispose()
     return dataProduct
 
-
 def get_content_based_recommendations(product_id, top_n, content_df, content_similarity):
     index = content_df[content_df['productId'] == product_id].index[0]
     similarity_scores = content_similarity[index]
     similar_indices = similarity_scores.argsort()[::-1][1:top_n + 1]
     recommendations = content_df.loc[similar_indices, 'productId'].values
     return recommendations
-
 
 @app.route('/api/product/recommendation', methods=['GET'])
 def get_all_product_recommendation():
